@@ -32,6 +32,7 @@ import org.traccar.reports.RouteReportProvider;
 import org.traccar.reports.StopsReportProvider;
 import org.traccar.reports.SummaryReportProvider;
 import org.traccar.reports.TripsReportProvider;
+import org.traccar.reports.SpeedExcessReportProvider;
 import org.traccar.reports.common.ReportExecutor;
 import org.traccar.reports.common.ReportMailer;
 import org.traccar.reports.model.CombinedReportItem;
@@ -39,6 +40,7 @@ import org.traccar.reports.model.GeofenceReportItem;
 import org.traccar.reports.model.StopReportItem;
 import org.traccar.reports.model.SummaryReportItem;
 import org.traccar.reports.model.TripReportItem;
+import org.traccar.reports.model.SpeedExcessReportItem;
 import org.traccar.storage.StorageException;
 
 import jakarta.inject.Inject;
@@ -88,6 +90,9 @@ public class ReportResource extends SimpleObjectResource<Report> {
 
     @Inject
     private DevicesReportProvider devicesReportProvider;
+
+    @Inject
+    private SpeedExcessReportProvider speedExcessReportProvider;
 
     @Inject
     private ReportMailer reportMailer;
@@ -362,6 +367,55 @@ public class ReportResource extends SimpleObjectResource<Report> {
         return executeReport(getUserId(), type.equals("mail"), stream -> {
             devicesReportProvider.getExcel(stream, getUserId());
         });
+    }
+
+    @Path("overSpeed")
+    @GET
+    public Collection<SpeedExcessReportItem> getSpeedExcess(
+            @QueryParam("deviceId") List<Long> deviceIds,
+            @QueryParam("groupId") List<Long> groupIds,
+            @QueryParam("from") Date from,
+            @QueryParam("to") Date to,
+            @QueryParam("speedLimit") double speedLimit) throws StorageException {
+
+        permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+        actionLogger.report(request, getUserId(), false, "overSpeed", from, to, deviceIds, groupIds);
+
+        System.out.printf(
+                "Speed Excess Report Request - User: %d | Devices: %s | From: %s | To: %s | Limit: %.2f%n",
+                getUserId(), deviceIds, from, to, speedLimit);
+
+        return speedExcessReportProvider.getObjects(getUserId(), deviceIds, groupIds, from, to, speedLimit);
+    }
+
+    @Path("overSpeed")
+    @GET
+    @Produces(EXCEL)
+    public Response getSpeedExcessExcel(
+            @QueryParam("deviceId") List<Long> deviceIds,
+            @QueryParam("groupId") List<Long> groupIds,
+            @QueryParam("from") Date from,
+            @QueryParam("to") Date to,
+            @QueryParam("speedLimit") double speedLimit,
+            @QueryParam("mail") boolean mail) throws StorageException {
+        permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+        return executeReport(getUserId(), mail, stream -> {
+            actionLogger.report(request, getUserId(), false, "overSpeed", from, to, deviceIds, groupIds);
+            speedExcessReportProvider.getExcel(stream, getUserId(), deviceIds, groupIds, from, to, speedLimit);
+        });
+    }
+
+    @Path("overSpeed/{type:xlsx|mail}")
+    @GET
+    @Produces(EXCEL)
+    public Response getSpeedExcessExcel(
+            @QueryParam("deviceId") List<Long> deviceIds,
+            @QueryParam("groupId") List<Long> groupIds,
+            @QueryParam("from") Date from,
+            @QueryParam("to") Date to,
+            @QueryParam("speedLimit") double speedLimit,
+            @PathParam("type") String type) throws StorageException {
+        return getSpeedExcessExcel(deviceIds, groupIds, from, to, speedLimit, type.equals("mail"));
     }
 
 }

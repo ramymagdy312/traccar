@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
+<properties>
+
+    <!-- Documentation: https://www.traccar.org/configuration-file/ -->
+    <entry key='web.port'>3010</entry>
+    <entry key='gt06.port'>10200</entry>
+    <entry key='osmand.port'>5055</entry>
+    <entry key='database.driver'>org.postgresql.Driver</entry>
+    <entry key='database.url'>jdbc:postgresql://localhost:5432/GPSTracker</entry>
+    <entry key='database.user'>postgres</entry>
+    <entry key='database.password'>123456</entry>
+    <entry key='mail.smtp.host'>mail.rockettravelsystem.com</entry>
+    <entry key='mail.smtp.port'>587</entry>
+    <entry key='mail.smtp.starttls.enable'>true</entry>
+    <entry key='mail.smtp.port'>465</entry>
+    <entry key='mail.smtp.ssl.enable'>true</entry>
+    <entry key='mail.smtp.from'>devops@rockettravelsystem.com</entry>
+    <entry key='mail.smtp.auth'>true</entry>
+    <entry key='mail.smtp.username'>devops@rockettravelsystem.com</entry>
+    <entry key='mail.smtp.password'>LzQav+~,hDGX</entry>
+    <entry key='report.trip.useIgnition'>true</entry>
+    <entry key='report.trip.minimalParkingDuration'>600</entry>
+    <entry key='report.trip.minimalTripDuration'>60</entry>
+    <entry key='report.trip.minimalTripDistance'>150</entry>
+    <!-- <entry key='speedLimit.enable'>true</entry> -->
+    <!-- <entry key='speedLimit.type'>overpass</entry> -->
+    <!-- <entry key='speedLimit.url'>http://overpass-api.de/api/interpreter</entry> -->
+
+</properties>
