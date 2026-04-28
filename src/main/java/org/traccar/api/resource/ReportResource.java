@@ -418,4 +418,6 @@ public class ReportResource extends SimpleObjectResource<Report> {
         return getSpeedExcessExcel(deviceIds, groupIds, from, to, speedLimit, type.equals("mail"));
     }
 
-}
+} 
+
+         

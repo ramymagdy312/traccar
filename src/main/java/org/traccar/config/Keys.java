@@ -1544,6 +1544,18 @@ public final class Keys {
             false);
 
     /**
+     * Maximum gap (in seconds) between two consecutive over-speed records for the same device that still allows them
+     * to be merged into a single Speed Excess event. The gap is measured as
+     * {@code nextRecord.startTime - currentRecord.endTime}. Records whose gap is strictly less than this value are
+     * merged. The value is hard-capped at 300 seconds (5 minutes) regardless of configuration to prevent unrelated
+     * events from being merged. Default is 300 seconds (5 minutes).
+     */
+    public static final ConfigKey<Long> REPORT_SPEED_EXCESS_MERGE_GAP = new LongConfigKey(
+            "report.speedExcess.mergeGap",
+            List.of(KeyType.CONFIG, KeyType.DEVICE),
+            300L);
+
+    /**
      * Boolean flag to enable or disable position filtering.
      */
     public static final ConfigKey<Boolean> FILTER_ENABLE = new BooleanConfigKey(
