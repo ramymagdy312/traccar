@@ -9,6 +9,7 @@ nbactions.xml
 .checkstyle
 .gradle
 out
+Output
 build
 .vscode
 bin

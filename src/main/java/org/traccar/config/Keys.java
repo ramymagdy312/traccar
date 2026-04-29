@@ -1547,13 +1547,53 @@ public final class Keys {
      * Maximum gap (in seconds) between two consecutive over-speed records for the same device that still allows them
      * to be merged into a single Speed Excess event. The gap is measured as
      * {@code nextRecord.startTime - currentRecord.endTime}. Records whose gap is strictly less than this value are
-     * merged. The value is hard-capped at 300 seconds (5 minutes) regardless of configuration to prevent unrelated
-     * events from being merged. Default is 300 seconds (5 minutes).
+     * merged. The value is hard-capped at 120 seconds (2 minutes) by the report provider regardless of
+     * configuration to prevent unrelated events from being merged. Default is 120 seconds (2 minutes).
      */
     public static final ConfigKey<Long> REPORT_SPEED_EXCESS_MERGE_GAP = new LongConfigKey(
             "report.speedExcess.mergeGap",
             List.of(KeyType.CONFIG, KeyType.DEVICE),
-            300L);
+            120L);
+
+    /**
+     * Minimum duration (in seconds) of an over-speed event for it to be reported. Events shorter than this are
+     * treated as transient GPS noise / spikes and discarded so that drivers are not penalized by isolated false
+     * readings. Default is 20 seconds. Set to 0 to disable.
+     */
+    public static final ConfigKey<Long> REPORT_SPEED_EXCESS_MIN_DURATION = new LongConfigKey(
+            "report.speedExcess.minDuration",
+            List.of(KeyType.CONFIG, KeyType.DEVICE),
+            20L);
+
+    /**
+     * Minimum distance (in meters) covered during an over-speed event for it to be reported. Events whose
+     * covered distance is below this value are treated as stationary high-speed spikes / GPS noise and
+     * discarded. Default is 200 meters. Set to 0 to disable.
+     */
+    public static final ConfigKey<Long> REPORT_SPEED_EXCESS_MIN_DISTANCE = new LongConfigKey(
+            "report.speedExcess.minDistance",
+            List.of(KeyType.CONFIG, KeyType.DEVICE),
+            200L);
+
+    /**
+     * Maximum acceptable GPS accuracy (in meters) for a position to participate in Speed Excess analysis.
+     * Positions reporting a worse (i.e. larger) accuracy value are skipped so that low-quality fixes cannot
+     * create false violations. Set to 0 to disable. Default is 100 meters.
+     */
+    public static final ConfigKey<Double> REPORT_SPEED_EXCESS_MAX_ACCURACY = new DoubleConfigKey(
+            "report.speedExcess.maxAccuracy",
+            List.of(KeyType.CONFIG, KeyType.DEVICE),
+            100.0);
+
+    /**
+     * Maximum plausible ground speed (in km/h) implied by the distance/time delta between two consecutive
+     * positions. If the implied speed exceeds this value the offending position is treated as a GPS teleport /
+     * jump and discarded. Default is 250 km/h. Set to 0 to disable.
+     */
+    public static final ConfigKey<Double> REPORT_SPEED_EXCESS_MAX_PLAUSIBLE_KPH = new DoubleConfigKey(
+            "report.speedExcess.maxPlausibleKph",
+            List.of(KeyType.CONFIG, KeyType.DEVICE),
+            250.0);
 
     /**
      * Boolean flag to enable or disable position filtering.
