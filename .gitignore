@@ -1,15 +1,48 @@
-target
-nbactions.xml
-.classpath
-.project
-.settings
-.idea
+# ======================
+# IDEs
+# ======================
+.idea/
 *.iml
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbactions.xml
+
+# ======================
+# OS
+# ======================
 .DS_Store
+
+# ======================
+# Build tools
+# ======================
+.gradle/
+build/
+out/
+bin/
+
+# ======================
+# Logs
+# ======================
+*.log
+
+# ======================
+# Setup / Installers
+# ======================
+setup/Output/
+Output/
+
+# ======================
+# Java
+# ======================
+*.class
+
+# ======================
+# Misc
+# ======================
 .checkstyle
-.gradle
-out
-Output
-build
-.vscode
-bin
