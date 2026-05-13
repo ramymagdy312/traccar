@@ -45,7 +45,7 @@ public class ConsoleServlet extends JakartaWebServlet {
             field.setAccessible(true);
             org.h2.server.web.WebServer server = (org.h2.server.web.WebServer) field.get(this);
 
-            ConnectionInfo connectionInfo = new ConnectionInfo("Traccar|"
+            ConnectionInfo connectionInfo = new ConnectionInfo("SerbTracker|"
                     + config.getString(Keys.DATABASE_DRIVER) + "|"
                     + config.getString(Keys.DATABASE_URL) + "|"
                     + config.getString(Keys.DATABASE_USER));

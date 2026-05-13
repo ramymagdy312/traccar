@@ -1,4 +1,4 @@
-Traccar is a free and open source GPS tracking system.
+SerbTracker is a GPS tracking system (based on the open source Traccar project).
 
 Installation instructions are available on the official website:
 

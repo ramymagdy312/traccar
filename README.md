@@ -1,10 +1,10 @@
-# [Traccar](https://www.traccar.org)
+# SerbTracker
 
 ## Overview
 
-Traccar is an open source GPS tracking system. This repository contains Java-based back-end service. It supports more than 200 GPS protocols and more than 2000 models of GPS tracking devices. Traccar can be used with any major SQL database system. It also provides easy to use [REST API](https://www.traccar.org/traccar-api/).
+SerbTracker is a GPS tracking system based on [Traccar](https://www.traccar.org). This repository contains Java-based back-end service. It supports more than 200 GPS protocols and more than 2000 models of GPS tracking devices. SerbTracker can be used with any major SQL database system. It also provides a [REST API](https://www.traccar.org/traccar-api/) compatible with Traccar.
 
-Other parts of Traccar solution include:
+Other parts of the upstream Traccar solution include:
 
 - [Traccar web app](https://github.com/traccar/traccar-web)
 - [Traccar Manager app](https://github.com/traccar/traccar-manager)

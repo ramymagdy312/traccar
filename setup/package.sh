@@ -8,7 +8,7 @@ cd $(dirname $0)
 
 usage () {
   echo "Usage: $0 VERSION [PLATFORM]"
-  echo "Build Traccar installers."
+  echo "Build SerbTracker installers."
   echo
   echo "Without PLATFORM provided, builds installers for all platforms."
   echo
@@ -52,7 +52,7 @@ check_requirement () {
 }
 
 info "Checking build requirements for platform: "$PLATFORM
-check_requirement "Traccar server archive" "ls ../target/tracker-server.jar" "Missing traccar archive"
+check_requirement "SerbTracker server archive" "ls ../target/tracker-server.jar" "Missing server archive"
 check_requirement "Zip" "which zip" "Missing zip binary"
 check_requirement "Unzip" "which unzip" "Missing unzip binary"
 if [ $PLATFORM != "other" ]; then

@@ -1,8 +1,8 @@
 [Setup]
-AppName=Traccar
+AppName=SerbTracker
 AppVersion=6.13.3
-DefaultDirName={pf}\Traccar
-OutputBaseFilename=traccar-setup
+DefaultDirName={pf}\SerbTracker
+OutputBaseFilename=serbtracker-setup
 ArchitecturesInstallIn64BitMode=x64
 
 [Dirs]

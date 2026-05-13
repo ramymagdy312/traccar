@@ -1,26 +1,18 @@
 openapi: 3.1.0
 info:
-  title: Traccar
-  description: Traccar GPS tracking server API documentation. To use the API you need to have a server instance. For testing purposes you can use one of free [demo servers](https://www.traccar.org/demo-server/). For production use you can install your own server or get a [subscription service](https://www.traccar.org/product/tracking-server/).
+  title: SerbTracker
+  description: SerbTracker GPS tracking server API documentation. To use the API you need to have a server instance. For testing purposes you can use one of free [demo servers](https://www.traccar.org/demo-server/). For production use you can install your own server or get a [subscription service](https://www.traccar.org/product/tracking-server/).
   contact:
-    name: Traccar Support
-    url: https://www.traccar.org/
-    email: support@traccar.org
+    name: SerbTracker Support
+    url: https://hoppataxi.com/
+    email: into@rockettravelsystem.com
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: '6.13.3'
 servers:
-  - url: https://demo.traccar.org/api
-    description: Demo Server 1
-  - url: https://demo2.traccar.org/api
-    description: Demo Server 2
-  - url: https://demo3.traccar.org/api
-    description: Demo Server 3
-  - url: https://demo4.traccar.org/api
-    description: Demo Server 4
-  - url: https://server.traccar.org/api
-    description: Subscription Server
+  - url: https://tracker.hoppataxi.com:10443/api
+    description: SerbTracker Server
   - url: http://{host}:{port}/api
     description: Other Server
     variables:
@@ -812,7 +804,7 @@ paths:
     get:
       summary: Fetches a list of Positions
       description: >-
-        We strongly recommend using [Traccar WebSocket
+        We strongly recommend using [SerbTracker WebSocket
         API](https://www.traccar.org/traccar-api/) instead of periodically
         polling positions endpoint. Without any params, it returns a list of
         last known positions for all the user's Devices. _from_ and _to_ fields
@@ -2007,6 +1999,138 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReportStops'
+  /reports/overSpeed:
+    get:
+      summary: >-
+        Fetch speed excess (overspeed) intervals for Devices or Groups within the
+        time period
+      description: >-
+        At least one _deviceId_ or one _groupId_ must be passed. Returns segments
+        where reported speed was at or above _speedLimit_ (in knots, same units
+        as other speed fields in reports). Use `Accept: application/json` for
+        JSON or the Excel media type for a spreadsheet; alternatively use
+        `/reports/overSpeed/{type}` with `xlsx` or `mail`.
+      tags:
+        - Reports
+      parameters:
+        - name: deviceId
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: groupId
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: from
+          in: query
+          description: in ISO 8601 format. eg. `1963-11-22T18:30:00Z`
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: in ISO 8601 format. eg. `1963-11-22T18:30:00Z`
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: speedLimit
+          in: query
+          description: Speed threshold in knots; positions at or above this speed are reported
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: mail
+          in: query
+          description: When requesting Excel (`Accept` spreadsheet type), set to `true` to email the report instead of downloading
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportSpeedExcess'
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+                description: Excel workbook (empty schema body; file bytes in response)
+  /reports/overSpeed/{type}:
+    get:
+      summary: Download or email the speed excess report as Excel
+      description: >-
+        Same data as `/reports/overSpeed` with `Accept` set to the Excel media
+        type. Path _type_ is `xlsx` for download or `mail` to send by email.
+      tags:
+        - Reports
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - xlsx
+              - mail
+        - name: deviceId
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: groupId
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: from
+          in: query
+          description: in ISO 8601 format. eg. `1963-11-22T18:30:00Z`
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: in ISO 8601 format. eg. `1963-11-22T18:30:00Z`
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: speedLimit
+          in: query
+          description: Speed threshold in knots
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK — Excel file or report queued for email when type is mail
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
   /statistics:
     get:
       summary: Fetch server Statistics
@@ -2666,7 +2790,7 @@ components:
           description: Default map zoom level
         version:
           type: string
-          description: Traccar server version string
+          description: SerbTracker server version string
         forceSettings:
           type: boolean
           description: Forces users to use the server-wide settings instead of their own
@@ -2734,7 +2858,7 @@ components:
         id:
           type: integer
           format: int64
-          description: Unique identifier assigned by Traccar
+          description: Unique identifier assigned by SerbTracker
         name:
           type: string
           description: Human friendly device label
@@ -3113,6 +3237,84 @@ components:
         engineHours:
           type: integer
           description: Engine hours accumulated during the stop
+    ReportSpeedExcess:
+      type: object
+      description: >-
+        One overspeed interval (speed at or above the requested limit), with
+        trip-style geometry and timing. Distances and speeds follow the same
+        units as trip reports.
+      properties:
+        deviceId:
+          type: integer
+          format: int64
+          description: Device identifier
+        deviceName:
+          type: string
+          description: Human readable device name
+        speedLimit:
+          type: number
+          description: Applied speed threshold for this row, in knots
+        maxSpeed:
+          type: number
+          description: in knots
+        averageSpeed:
+          type: number
+          description: in knots
+        distance:
+          type: number
+          description: in meters
+        spentFuel:
+          type: number
+          description: in liters
+        duration:
+          type: integer
+          description: Interval duration in seconds
+        startTime:
+          type: string
+          description: in ISO 8601 format. eg. `1963-11-22T18:30:00Z`
+          format: date-time
+        startAddress:
+          type: string
+          description: Address at the start of the interval
+        startLat:
+          type: number
+          description: Starting latitude in decimal degrees
+        startLon:
+          type: number
+          description: Starting longitude in decimal degrees
+        endTime:
+          type: string
+          description: in ISO 8601 format. eg. `1963-11-22T18:30:00Z`
+          format: date-time
+        endAddress:
+          type: string
+          description: Address at the end of the interval
+        endLat:
+          type: number
+          description: Ending latitude in decimal degrees
+        endLon:
+          type: number
+          description: Ending longitude in decimal degrees
+        startPositionId:
+          type: integer
+          format: int64
+          description: Identifier of the first position in the interval
+        endPositionId:
+          type: integer
+          format: int64
+          description: Identifier of the last position in the interval
+        startOdometer:
+          type: number
+          description: Odometer at interval start when available
+        endOdometer:
+          type: number
+          description: Odometer at interval end when available
+        driverUniqueId:
+          type: string
+          description: Unique identifier of the driver assigned to the device
+        driverName:
+          type: string
+          description: Name of the driver assigned to the device
     Statistics:
       type: object
       properties:
