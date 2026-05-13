@@ -417,7 +417,4 @@ public class ReportResource extends SimpleObjectResource<Report> {
             @PathParam("type") String type) throws StorageException {
         return getSpeedExcessExcel(deviceIds, groupIds, from, to, speedLimit, type.equals("mail"));
     }
-
-} 
-
-         
+}
