@@ -1,0 +1,16 @@
+[Unit]
+Description=SerbTracker
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/SerbTracker
+ExecStart=/opt/SerbTracker/jre/bin/java -jar tracker-server.jar conf/SerbTracker.xml
+SyslogIdentifier=SerbTracker
+SuccessExitStatus=143
+WatchdogSec=600
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

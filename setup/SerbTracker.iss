@@ -1,8 +1,8 @@
 [Setup]
-AppName=DevsTracker
-AppVersion=6.12.2
-DefaultDirName={pf}\DevsTracker
-OutputBaseFilename=DevsTracker-setup_6_12_2
+AppName=SerbTracker
+AppVersion=6.13.3
+DefaultDirName={pf}\SerbTracker
+OutputBaseFilename=SerbTracker-setup_6_13_3
 ArchitecturesInstallIn64BitMode=x64
 
 [Dirs]
@@ -13,7 +13,7 @@ Name: "{app}\logs"
 Source: "Output\*"; DestDir: "{app}"; Flags: recursesubdirs
 
 [Run]
-Filename: "{app}\jre\bin\java.exe"; Parameters: "-jar ""{app}\tracker-server.jar"" --install .\conf\DevsTracker.xml"; Flags: runhidden
+Filename: "{app}\jre\bin\java.exe"; Parameters: "-jar ""{app}\tracker-server.jar"" --install .\conf\SerbTracker.xml"; Flags: runhidden
 
 [UninstallRun]
 Filename: "{app}\jre\bin\java.exe"; Parameters: "-jar ""{app}\tracker-server.jar"" --uninstall"; Flags: runhidden
